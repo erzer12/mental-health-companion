@@ -6,49 +6,124 @@ import time
 # --- IMPORT YOUR CUSTOM RAG ENGINE ---
 from rag_engine import build_knowledge_base, retrieve_context
 
-# --- CUSTOM CSS FOR "ZEN" LOOK ---
+# --- CUSTOM CSS FOR CALMING "ZEN" LOOK ---
 custom_css = """
-/* Make the background a soft, calming gradient */
+/* Soft, calming gradient background */
 .gradio-container {
-    background: linear-gradient(to bottom right, #f0fdf4, #e0f2fe) !important;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #e0f2fe 100%) !important;
+    min-height: 100vh;
 }
 
-/* Round the chat window and add a subtle "glass" shadow */
+/* Light, clean chat window */
 .chatbot {
-    border-radius: 20px !important;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-    background: rgba(255, 255, 255, 0.6) !important;
-    backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 16px !important;
+    border: 1px solid #d1fae5 !important;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1) !important;
 }
 
-/* Style the user/bot bubbles */
-.user-message {
-    background-color: #10b981 !important; /* Emerald Green */
-    border-radius: 20px 20px 0 20px !important;
-}
-.bot-message {
-    background-color: #f1f5f9 !important; /* Slate 100 */
-    border-radius: 20px 20px 20px 0 !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+/* Style message bubbles */
+.message {
+    border-radius: 16px !important;
 }
 
-/* Make the "Send" button pop */
+/* User messages - soft emerald */
+.message.user {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: white !important;
+}
+
+/* Bot messages - light sage */
+.message.bot, .message.assistant {
+    background: #f0fdf4 !important;
+    border: 1px solid #a7f3d0 !important;
+    color: #064e3b !important;
+}
+
+/* Input textbox */
+.textbox {
+    border-radius: 12px !important;
+    border: 2px solid #a7f3d0 !important;
+    background: white !important;
+}
+
+.textbox:focus-within {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Send button - vibrant emerald */
 #send-btn {
-    background: linear-gradient(90deg, #10b981, #34d399);
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 12px;
-    transition: transform 0.1s;
-}
-#send-btn:hover {
-    transform: scale(1.02);
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    padding: 10px 24px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
 }
 
-/* Style the clear button */
+#send-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Clear button - subtle outline */
 #clear-btn {
-    border-radius: 12px;
+    background: white !important;
+    border: 2px solid #d1fae5 !important;
+    color: #059669 !important;
+    font-weight: 500 !important;
+    border-radius: 12px !important;
+    transition: all 0.2s ease !important;
+}
+
+#clear-btn:hover {
+    background: #f0fdf4 !important;
+    border-color: #10b981 !important;
+}
+
+/* Right panel styling */
+.panel {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 16px !important;
+    border: 1px solid #d1fae5 !important;
+}
+
+/* Labels and badges */
+.label {
+    background: white !important;
+    border-radius: 12px !important;
+    border: 1px solid #d1fae5 !important;
+}
+
+/* Accordion */
+.accordion {
+    background: white !important;
+    border-radius: 12px !important;
+    border: 1px solid #d1fae5 !important;
+}
+
+/* Checkboxes in grounding widget */
+.checkbox-group {
+    background: white !important;
+    border-radius: 8px !important;
+}
+
+/* Title styling */
+h1 {
+    color: #064e3b !important;
+    font-weight: 700 !important;
+}
+
+h3 {
+    color: #065f46 !important;
+}
+
+/* Markdown text */
+.markdown-text {
+    color: #064e3b !important;
 }
 """
 
