@@ -6,140 +6,227 @@ import time
 # --- IMPORT YOUR CUSTOM RAG ENGINE ---
 from rag_engine import build_knowledge_base, retrieve_context
 
-# --- CUSTOM CSS FOR CALMING DARK "ZEN" LOOK ---
+# --- CUSTOM CSS: ZEN GLASSMORPHISM DARK THEME ---
 custom_css = """
-/* Dark calming gradient background */
+/* ===== BASE DARK THEME ===== */
 .gradio-container {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0d1f2d 100%) !important;
     min-height: 100vh;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Dark chat window */
+/* ===== GLASSMORPHISM CHAT WINDOW ===== */
 .chatbot {
-    background: #1e293b !important;
-    border-radius: 16px !important;
-    border: 1px solid #334155 !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(52, 211, 153, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Style message bubbles */
+/* ===== MESSAGE BUBBLES ===== */
 .message {
     border-radius: 16px !important;
+    padding: 12px 16px !important;
 }
 
-/* User messages - emerald accent */
 .message.user {
     background: linear-gradient(135deg, #10b981, #059669) !important;
     color: white !important;
+    border-radius: 20px 20px 4px 20px !important;
 }
 
-/* Bot messages - dark slate */
 .message.bot, .message.assistant {
-    background: #334155 !important;
-    border: 1px solid #475569 !important;
+    background: rgba(51, 65, 85, 0.9) !important;
+    border: 1px solid rgba(100, 116, 139, 0.5) !important;
     color: #e2e8f0 !important;
+    border-radius: 20px 20px 20px 4px !important;
 }
 
-/* Input textbox */
+/* ===== INPUT TEXTBOX ===== */
 .textbox, textarea, input[type="text"] {
-    border-radius: 12px !important;
-    border: 2px solid #475569 !important;
-    background: #1e293b !important;
+    border-radius: 14px !important;
+    border: 2px solid rgba(71, 85, 105, 0.8) !important;
+    background: rgba(30, 41, 59, 0.9) !important;
     color: #e2e8f0 !important;
+    padding: 12px 16px !important;
+    transition: all 0.3s ease !important;
 }
 
 .textbox:focus-within, textarea:focus, input[type="text"]:focus {
     border-color: #10b981 !important;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15) !important;
 }
 
-/* Send button - vibrant emerald */
+/* ===== BUTTONS ===== */
 #send-btn {
     background: linear-gradient(135deg, #10b981, #059669) !important;
     border: none !important;
     color: white !important;
     font-weight: 600 !important;
-    border-radius: 12px !important;
-    padding: 10px 24px !important;
+    border-radius: 14px !important;
+    padding: 12px 28px !important;
     transition: all 0.2s ease !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
 }
 
 #send-btn:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5) !important;
 }
 
-/* Clear button - dark outline */
 #clear-btn {
-    background: #334155 !important;
-    border: 2px solid #475569 !important;
+    background: rgba(51, 65, 85, 0.8) !important;
+    border: 2px solid rgba(71, 85, 105, 0.8) !important;
     color: #10b981 !important;
     font-weight: 500 !important;
-    border-radius: 12px !important;
+    border-radius: 14px !important;
     transition: all 0.2s ease !important;
 }
 
 #clear-btn:hover {
-    background: #475569 !important;
+    background: rgba(71, 85, 105, 0.9) !important;
     border-color: #10b981 !important;
 }
 
-/* Right panel styling */
+/* ===== RIGHT PANEL (GLASSMORPHISM) ===== */
 .panel {
-    background: #1e293b !important;
-    border-radius: 16px !important;
-    border: 1px solid #334155 !important;
+    background: rgba(30, 41, 59, 0.7) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(52, 211, 153, 0.15) !important;
 }
 
-/* Labels and badges */
+/* ===== LABELS & BADGES ===== */
 .label, .label-wrap {
-    background: #334155 !important;
+    background: rgba(51, 65, 85, 0.9) !important;
     border-radius: 12px !important;
-    border: 1px solid #475569 !important;
+    border: 1px solid rgba(71, 85, 105, 0.6) !important;
     color: #e2e8f0 !important;
 }
 
-/* Accordion */
+/* ===== ACCORDION ===== */
 .accordion {
-    background: #1e293b !important;
-    border-radius: 12px !important;
-    border: 1px solid #334155 !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(71, 85, 105, 0.5) !important;
     color: #e2e8f0 !important;
 }
 
-/* Checkboxes in grounding widget */
-.checkbox-group, .checkbox-label {
-    background: #1e293b !important;
+/* ===== CHECKBOXES ===== */
+.checkbox-group, .checkbox-label, .form {
+    background: transparent !important;
     color: #e2e8f0 !important;
 }
 
-/* Title styling */
+input[type="checkbox"] {
+    accent-color: #10b981 !important;
+}
+
+/* ===== TYPOGRAPHY ===== */
 h1, .markdown h1 {
     color: #10b981 !important;
     font-weight: 700 !important;
+    text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
 }
 
 h3, .markdown h3 {
     color: #34d399 !important;
 }
 
-/* All text to light color */
 .markdown-text, .prose, p, span, label {
-    color: #e2e8f0 !important;
+    color: #cbd5e1 !important;
 }
 
-/* Group containers */
-.group, .form, .block {
-    background: transparent !important;
+/* ===== BREATHING ANIMATION KEYFRAMES ===== */
+@keyframes breathe {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 20px rgba(45, 212, 191, 0.3);
+    }
+    25% { 
+        transform: scale(1.4); 
+        box-shadow: 0 0 40px rgba(45, 212, 191, 0.6);
+    }
+    50% { 
+        transform: scale(1.4); 
+        box-shadow: 0 0 40px rgba(45, 212, 191, 0.6);
+    }
+    75% { 
+        transform: scale(1); 
+        box-shadow: 0 0 20px rgba(45, 212, 191, 0.3);
+    }
 }
 
-/* Dropdown and selects */
-select, .dropdown {
-    background: #1e293b !important;
-    color: #e2e8f0 !important;
-    border: 1px solid #475569 !important;
+@keyframes breathe-text {
+    0%, 100% { opacity: 1; }
+    12.5% { opacity: 0; }
+    25% { opacity: 1; }
+    37.5% { opacity: 0; }
+    50% { opacity: 1; }
+    62.5% { opacity: 0; }
+    75% { opacity: 1; }
+    87.5% { opacity: 0; }
 }
+
+.breathing-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2dd4bf, #14b8a6);
+    margin: 20px auto;
+    animation: breathe 16s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.breathing-container {
+    text-align: center;
+    padding: 20px;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 16px;
+    border: 1px solid rgba(45, 212, 191, 0.3);
+}
+
+.breathing-instruction {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ===== GROUNDING CHECKLIST STYLING ===== */
+.grounding-container {
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 16px;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    padding: 16px;
+}
+
+.grounding-title {
+    color: #fbbf24;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+"""
+
+# --- ANIMATED BREATHING WIDGET HTML ---
+BREATHING_HTML = """
+<div class="breathing-container">
+    <h4 style="color: #2dd4bf; margin-bottom: 10px;">🌬️ Box Breathing</h4>
+    <div class="breathing-circle">
+        Breathe
+    </div>
+    <div class="breathing-instruction">
+        <strong>Inhale</strong> (4s) → <strong>Hold</strong> (4s) → <strong>Exhale</strong> (4s) → <strong>Hold</strong> (4s)
+    </div>
+    <p style="color: #64748b; font-size: 12px; margin-top: 12px;">
+        Follow the circle. It expands as you inhale, holds, then shrinks as you exhale.
+    </p>
+</div>
 """
 
 # --- 1. SETUP: Models & Knowledge ---
@@ -153,12 +240,57 @@ emotion_classifier = pipeline(
 )
 
 # B. Chat Model (Serverless)
-# Make sure you have added your HF_TOKEN in the Space Settings > Secrets
 client = InferenceClient("meta-llama/Meta-Llama-3-8B-Instruct")
 
 # C. Knowledge Base (Local Vector DB)
-# This will look for the 'vectorstore' folder or build it from 'data/*.pdf'
 vector_db = build_knowledge_base()
+
+# --- ENHANCED EMOTION CLASSIFICATION ---
+def classify_emotion(user_message):
+    """
+    Enhanced emotion classification with context-aware overrides.
+    Fixes: Procrastination/academic stress should NOT be classified as 'sadness'.
+    """
+    message_lower = user_message.lower()
+    
+    # --- PROCRASTINATION/ACADEMIC STRESS OVERRIDE ---
+    procrastination_keywords = [
+        'homework', 'assignment', 'exam', 'exams', 'test', 'study', 'studying',
+        'lazy', 'procrastinating', 'procrastination', "can't focus", "don't want to work",
+        'deadline', 'project', 'essay', 'paper', 'grades', 'school', 'college',
+        'unmotivated', 'distracted', 'putting off', 'avoiding work'
+    ]
+    
+    if any(keyword in message_lower for keyword in procrastination_keywords):
+        # Check if it's more stress or actual sadness
+        sadness_indicators = ['crying', 'cry', 'hopeless', 'worthless', 'grief', 'died', 'death', 'lost someone']
+        if not any(sad in message_lower for sad in sadness_indicators):
+            return "stress", 0.85  # Override to stress, not sadness
+    
+    # --- PANIC/ANXIETY OVERRIDE ---
+    panic_keywords = ['panic', 'panicking', 'panic attack', 'heart racing', "can't breathe", 'hyperventilating']
+    if any(keyword in message_lower for keyword in panic_keywords):
+        return "panic", 0.90
+    
+    anxiety_keywords = ['anxious', 'anxiety', 'worried', 'nervous', 'scared', 'terrified', 'fear']
+    if any(keyword in message_lower for keyword in anxiety_keywords):
+        return "anxiety", 0.85
+    
+    # --- DISSOCIATION OVERRIDE ---
+    dissociation_keywords = ['unreal', 'floating', 'disconnected', 'numb', 'out of body', 'watching myself', 'not real']
+    if any(keyword in message_lower for keyword in dissociation_keywords):
+        return "dissociation", 0.80
+    
+    # --- DEFAULT: Use ML Model ---
+    try:
+        result = emotion_classifier(user_message)
+        emotion = result[0][0]['label']
+        confidence = result[0][0]['score']
+        return emotion, confidence
+    except Exception as e:
+        print(f"Emotion detection error: {e}")
+        return "neutral", 0.0
+
 
 # --- 2. THE CORE INTELLIGENCE PIPELINE ---
 def agent_logic(user_message, history):
@@ -167,55 +299,48 @@ def agent_logic(user_message, history):
     Flow: User -> Emotion Detect -> Knowledge Search -> LLM Reasoning -> UI Decision
     """
     
-    # Step A: PERCEPTION (Emotion)
-    try:
-        emotion_res = emotion_classifier(user_message)
-        emotion = emotion_res[0][0]['label']
-        confidence = emotion_res[0][0]['score']
-    except Exception as e:
-        print(f"Emotion detection error: {e}")
-        emotion = "neutral"
-        confidence = 0.0
+    # Step A: PERCEPTION (Enhanced Emotion)
+    emotion, confidence = classify_emotion(user_message)
 
     # Step B: MEMORY (RAG Retrieval)
-    # We retrieve specific advice based on the user's text
     knowledge_context = retrieve_context(vector_db, user_message)
     
     # Step C: REASONING (System Prompt)
-    # Map emotion to natural language hint (internal use only, not shown to user)
     emotion_hints = {
-        "sadness": "They seem to be feeling down or sad.",
-        "fear": "They appear anxious or worried about something.",
-        "anger": "They might be frustrated or upset.",
+        "sadness": "They are experiencing genuine sadness, possibly grief or hopelessness.",
+        "fear": "They appear anxious or fearful about something.",
+        "anger": "They seem frustrated or upset.",
         "joy": "They seem to be in a positive mood.",
-        "surprise": "Something unexpected may have happened to them.",
-        "disgust": "They may be experiencing aversion or discomfort.",
-        "neutral": "Their emotional state is unclear."
+        "surprise": "Something unexpected may have happened.",
+        "disgust": "They may be experiencing aversion.",
+        "neutral": "Their emotional state is unclear.",
+        "stress": "They are stressed, likely about academic work or responsibilities.",
+        "panic": "They are experiencing panic or acute anxiety symptoms.",
+        "anxiety": "They are feeling anxious or worried.",
+        "dissociation": "They may be feeling disconnected or unreal."
     }
     emotion_hint = emotion_hints.get(emotion, "Their emotional state is unclear.")
     
-    system_prompt = f"""You are Zen, a warm and supportive mental health companion for students. You're like a caring friend who happens to know a lot about mental wellness.
+    system_prompt = f"""You are Zen, a warm and supportive mental health companion for students. You're like a caring friend who knows about mental wellness.
 
-CONTEXT (use naturally, never mention these details directly):
+CONTEXT (use naturally, never mention directly):
 - {emotion_hint}
-- Reference material: {knowledge_context if knowledge_context else "Draw from general supportive counseling techniques."}
+- Reference: {knowledge_context if knowledge_context else "Use general supportive techniques."}
 
 YOUR PERSONALITY:
-- Warm, genuine, and never clinical or robotic
-- You speak like a supportive friend, not a therapist reading from a textbook
-- You use casual language, contractions, and occasional gentle humor when appropriate
-- You NEVER mention "confidence levels", "scores", "databases", or any technical terms
-- You NEVER say things like "I detect that you're feeling..." or "Your emotion is..."
+- Warm, genuine, never clinical or robotic
+- Speak like a supportive friend, not a textbook therapist
+- Use casual language and contractions
+- NEVER mention "confidence levels", "scores", "databases", or technical terms
+- NEVER say "I detect that you're feeling..." 
 
 HOW TO RESPOND:
-1. Start by acknowledging what they shared (don't label their emotion, just reflect understanding)
-2. Share a helpful insight or technique naturally woven into conversation
-3. Keep it brief - 2-3 short paragraphs max
-4. End with an open question or gentle suggestion, not a list of options
+1. Acknowledge what they shared (don't label their emotion)
+2. Share helpful insight or technique naturally
+3. Keep it brief - 2-3 paragraphs max
+4. End with an open question or gentle suggestion
 
-EXAMPLE OF WHAT NOT TO SAY: "Your confidence level is 0.37" or "I detect sadness in your message"
-EXAMPLE OF NATURAL RESPONSE: "That sounds really tough. It makes total sense that you'd feel overwhelmed right now."
-"""
+Remember: Academic stress is NOT sadness. Procrastination needs motivation tips, not grief counseling."""
 
     # Prepare messages for Llama-3
     messages = [{"role": "system", "content": system_prompt}]
@@ -225,49 +350,51 @@ EXAMPLE OF NATURAL RESPONSE: "That sounds really tough. It makes total sense tha
 
     # Step D: GENERATION (Stream Response)
     partial_response = ""
-    # We catch errors in case the Inference API is busy
     try:
         for msg in client.chat_completion(messages, max_tokens=512, stream=True):
-            # Guard against empty choices array
             if msg.choices and len(msg.choices) > 0:
                 token = msg.choices[0].delta.content
-                if token:  # Handle None tokens from streaming API
+                if token:
                     partial_response += token
                 yield partial_response, emotion
     except Exception as e:
-        yield f"I'm having trouble connecting to my brain right now. (Error: {str(e)})", emotion
+        yield f"I'm having trouble connecting right now. Let's try again in a moment. (Error: {str(e)})", emotion
+
 
 # --- 3. UI HELPER FUNCTIONS ---
 def chat_wrapper(user_input, history):
-    # This function bridges the UI and the Logic
+    """Bridges the UI and the agent logic with widget visibility control."""
+    
+    if not user_input.strip():
+        yield history, "", "Type a message...", gr.update(visible=False), gr.update(visible=False)
+        return
     
     generated_text = ""
     detected_emotion = "neutral"
     
-    # 1. Run the agent (Stream text)
+    # Stream the response
     for text_chunk, emotion in agent_logic(user_input, history):
         generated_text = text_chunk
         detected_emotion = emotion
-        # Stream the chat update immediately (Gradio 6 message format)
         new_history = history + [
             {"role": "user", "content": user_input},
             {"role": "assistant", "content": generated_text}
         ]
         yield new_history, "", f"Detected: {detected_emotion.upper()}", gr.update(visible=False), gr.update(visible=False)
 
-    # 2. Post-Processing: Decide which widget to show
+    # --- WIDGET VISIBILITY LOGIC ---
     show_breathing = gr.update(visible=False)
     show_grounding = gr.update(visible=False)
     
-    # Logic: Show breathing for high-arousal negative emotions
-    if detected_emotion in ["fear", "anger", "sadness"]:
+    # Show BREATHING for panic/anxiety
+    if detected_emotion in ["panic", "anxiety", "fear"]:
         show_breathing = gr.update(visible=True)
     
-    # Logic: Show grounding for panic keywords
-    if "panic" in user_input.lower() or "overwhelm" in user_input.lower():
+    # Show GROUNDING for dissociation/panic
+    if detected_emotion in ["dissociation", "panic"]:
         show_grounding = gr.update(visible=True)
     
-    # Final Yield with widgets active (Gradio 6 message format)
+    # Final yield
     final_history = history + [
         {"role": "user", "content": user_input},
         {"role": "assistant", "content": generated_text}
@@ -275,23 +402,30 @@ def chat_wrapper(user_input, history):
     yield final_history, "", f"Detected: {detected_emotion.upper()}", show_breathing, show_grounding
 
 
-# --- 4. THE DASHBOARD UI (Blocks) ---
+# --- 4. THE DASHBOARD UI ---
 with gr.Blocks(
     theme=gr.themes.Soft(primary_hue="emerald", neutral_hue="slate"),
     css=custom_css,
     title="Zen Companion"
 ) as demo:
     
-    gr.Markdown("# 🌿 Zen: Context-Aware Student Companion")
+    gr.Markdown("# 🌿 Zen: Your Mental Health Companion")
+    gr.Markdown("*A safe space to talk. I'm here to listen and help.*")
     
     with gr.Row():
         # --- LEFT COLUMN: Chat Interface ---
         with gr.Column(scale=2):
-            chatbot = gr.Chatbot(height=500, label="Conversation")
+            chatbot = gr.Chatbot(
+                height=480, 
+                label="Conversation",
+                show_copy_button=True,
+                placeholder="Start a conversation... I'm here to help."
+            )
             msg = gr.Textbox(
                 label="Your Message", 
-                placeholder="Type here (e.g., 'I'm stressed about exams')...",
-                autofocus=True
+                placeholder="How are you feeling today?",
+                autofocus=True,
+                lines=2
             )
             with gr.Row():
                 send_btn = gr.Button("Send", elem_id="send-btn", variant="primary")
@@ -299,34 +433,41 @@ with gr.Blocks(
 
         # --- RIGHT COLUMN: Dynamic Wellness Panel ---
         with gr.Column(scale=1, variant="panel"):
-            gr.Markdown("### 🧠 Live Analysis")
-            mood_badge = gr.Label(value="Waiting...", label="Emotional State")
+            gr.Markdown("### 🧠 Emotional Insight")
+            mood_badge = gr.Label(value="Waiting...", label="Current State")
             
-            # --- WIDGET 1: Breathing Exercise (Hidden by default) ---
+            # --- BREATHING WIDGET (Animated) ---
             with gr.Group(visible=False) as breathing_widget:
                 gr.Markdown("---")
-                gr.Markdown("### 🌬️ Box Breathing Tool")
-                gr.HTML("""
-                <div style="text-align:center; padding: 20px; background-color: #e0f7fa; border-radius: 10px;">
-                    <div style="font-size: 40px; animation: pulse 4s infinite;">🔵</div>
-                    <p>Inhale (4s) ... Hold (4s) ... Exhale (4s)</p>
-                </div>
-                """)
+                gr.HTML(BREATHING_HTML)
             
-            # --- WIDGET 2: Grounding Checklist (Hidden by default) ---
+            # --- GROUNDING WIDGET (5-4-3-2-1) ---
             with gr.Group(visible=False) as grounding_widget:
                 gr.Markdown("---")
                 gr.Markdown("### 🦶 5-4-3-2-1 Grounding")
-                gr.Markdown("You mentioned panic. Let's ground ourselves.")
-                gr.Checkbox(label="👀 5 things I see")
-                gr.Checkbox(label="✋ 4 things I can touch")
-                gr.Checkbox(label="👂 3 things I hear")
-                gr.Checkbox(label="👃 2 things I smell")
-                gr.Checkbox(label="👅 1 thing I taste")
+                gr.Markdown("*Focus on your senses to reconnect with the present.*")
+                gr.CheckboxGroup(
+                    choices=[
+                        "👀 5 Things I See",
+                        "✋ 4 Things I Touch", 
+                        "👂 3 Things I Hear",
+                        "👃 2 Things I Smell",
+                        "👅 1 Thing I Taste"
+                    ],
+                    label="Check off as you go:",
+                    interactive=True
+                )
 
             # Static Resources
-            with gr.Accordion("📚 Knowledge Source", open=False):
-                gr.Markdown("This agent is grounded in the documents found in the `/data` folder.")
+            with gr.Accordion("📚 About the Knowledge Base", open=False):
+                gr.Markdown("""
+                This companion is powered by a curated library of mental health resources including:
+                - Breathing techniques
+                - Grounding exercises  
+                - Cognitive behavioral strategies
+                - Sleep hygiene tips
+                - Stress management guides
+                """)
 
     # --- 5. EVENT WIRING ---
     msg.submit(
@@ -340,7 +481,7 @@ with gr.Blocks(
         outputs=[chatbot, msg, mood_badge, breathing_widget, grounding_widget]
     )
     
-    clear_btn.click(lambda: None, None, chatbot, queue=False)
+    clear_btn.click(lambda: ([], "", "Waiting..."), None, [chatbot, msg, mood_badge], queue=False)
 
 if __name__ == "__main__":
     demo.launch(ssr_mode=False)
