@@ -110,14 +110,14 @@ def chat_wrapper(user_input, history):
 
 
 # --- 4. THE DASHBOARD UI (Blocks) ---
-with gr.Blocks(theme=gr.themes.Soft(), title="Zen Student Companion") as demo:
+with gr.Blocks(title="Zen Student Companion") as demo:
     
     gr.Markdown("# 🌿 Zen: Context-Aware Student Companion")
     
     with gr.Row():
         # --- LEFT COLUMN: Chat Interface ---
         with gr.Column(scale=2):
-            chatbot = gr.Chatbot(height=500, label="Conversation", bubble_full_width=False)
+            chatbot = gr.Chatbot(height=500, label="Conversation")
             msg = gr.Textbox(
                 label="Your Message", 
                 placeholder="Type here (e.g., 'I'm stressed about exams')...",
@@ -166,4 +166,4 @@ with gr.Blocks(theme=gr.themes.Soft(), title="Zen Student Companion") as demo:
     clear_btn.click(lambda: None, None, chatbot, queue=False)
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(theme=gr.themes.Soft())
