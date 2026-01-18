@@ -6,6 +6,52 @@ import time
 # --- IMPORT YOUR CUSTOM RAG ENGINE ---
 from rag_engine import build_knowledge_base, retrieve_context
 
+# --- CUSTOM CSS FOR "ZEN" LOOK ---
+custom_css = """
+/* Make the background a soft, calming gradient */
+.gradio-container {
+    background: linear-gradient(to bottom right, #f0fdf4, #e0f2fe) !important;
+}
+
+/* Round the chat window and add a subtle "glass" shadow */
+.chatbot {
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(4px);
+}
+
+/* Style the user/bot bubbles */
+.user-message {
+    background-color: #10b981 !important; /* Emerald Green */
+    border-radius: 20px 20px 0 20px !important;
+}
+.bot-message {
+    background-color: #f1f5f9 !important; /* Slate 100 */
+    border-radius: 20px 20px 20px 0 !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Make the "Send" button pop */
+#send-btn {
+    background: linear-gradient(90deg, #10b981, #34d399);
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    transition: transform 0.1s;
+}
+#send-btn:hover {
+    transform: scale(1.02);
+}
+
+/* Style the clear button */
+#clear-btn {
+    border-radius: 12px;
+}
+"""
+
 # --- 1. SETUP: Models & Knowledge ---
 print("⏳ Initializing AI Models...")
 
@@ -36,7 +82,8 @@ def agent_logic(user_message, history):
         emotion_res = emotion_classifier(user_message)
         emotion = emotion_res[0][0]['label']
         confidence = emotion_res[0][0]['score']
-    except:
+    except Exception as e:
+        print(f"Emotion detection error: {e}")
         emotion = "neutral"
         confidence = 0.0
 
@@ -139,7 +186,11 @@ def chat_wrapper(user_input, history):
 
 
 # --- 4. THE DASHBOARD UI (Blocks) ---
-with gr.Blocks(title="Zen Student Companion") as demo:
+with gr.Blocks(
+    theme=gr.themes.Soft(primary_hue="emerald", neutral_hue="slate"),
+    css=custom_css,
+    title="Zen Companion"
+) as demo:
     
     gr.Markdown("# 🌿 Zen: Context-Aware Student Companion")
     
@@ -152,7 +203,9 @@ with gr.Blocks(title="Zen Student Companion") as demo:
                 placeholder="Type here (e.g., 'I'm stressed about exams')...",
                 autofocus=True
             )
-            clear_btn = gr.Button("Clear Chat")
+            with gr.Row():
+                send_btn = gr.Button("Send", elem_id="send-btn", variant="primary")
+                clear_btn = gr.Button("Clear Chat", elem_id="clear-btn")
 
         # --- RIGHT COLUMN: Dynamic Wellness Panel ---
         with gr.Column(scale=1, variant="panel"):
@@ -191,8 +244,13 @@ with gr.Blocks(title="Zen Student Companion") as demo:
         inputs=[msg, chatbot], 
         outputs=[chatbot, msg, mood_badge, breathing_widget, grounding_widget]
     )
+    send_btn.click(
+        chat_wrapper,
+        inputs=[msg, chatbot],
+        outputs=[chatbot, msg, mood_badge, breathing_widget, grounding_widget]
+    )
     
     clear_btn.click(lambda: None, None, chatbot, queue=False)
 
 if __name__ == "__main__":
-    demo.launch(theme=gr.themes.Soft(), ssr_mode=False)
+    demo.launch(ssr_mode=False)

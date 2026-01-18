@@ -119,7 +119,7 @@ mental-health-companion/
 
 1. **Clone the repository**
    ```bash
-   git clone https://huggingface.co/spaces/YOUR_USERNAME/mental-health-companion
+   git clone https://huggingface.co/spaces/Erzer12/mental-health-companion
    cd mental-health-companion
    ```
 
