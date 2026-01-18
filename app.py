@@ -84,7 +84,6 @@ demo = gr.ChatInterface(
     title="Student Wellness Companion 🌿",
     description="A safe space to chat. I can sense your mood and offer support.",
     examples=["I feel really overwhelmed with exams coming up.", "I feel lonely and isolated on campus.", "I'm just really angry at my professor."],
-    theme="soft"
 )
 
 if __name__ == "__main__":
