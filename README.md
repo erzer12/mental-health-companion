@@ -8,7 +8,7 @@ sdk_version: 6.3.0
 app_file: app.py
 pinned: false
 license: mit
-short_description: 'AI-driven chatbot that detects user mood and provides context-aware mental health support'
+short_description: 'AI chatbot with mood detection & mental health support'
 ---
 
 # 🌿 Zen: Mental Health Companion
