@@ -6,20 +6,20 @@ import time
 # --- IMPORT YOUR CUSTOM RAG ENGINE ---
 from rag_engine import build_knowledge_base, retrieve_context
 
-# --- CUSTOM CSS FOR CALMING "ZEN" LOOK ---
+# --- CUSTOM CSS FOR CALMING DARK "ZEN" LOOK ---
 custom_css = """
-/* Soft, calming gradient background */
+/* Dark calming gradient background */
 .gradio-container {
-    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #e0f2fe 100%) !important;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0d1f2d 100%) !important;
     min-height: 100vh;
 }
 
-/* Light, clean chat window */
+/* Dark chat window */
 .chatbot {
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: #1e293b !important;
     border-radius: 16px !important;
-    border: 1px solid #d1fae5 !important;
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1) !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Style message bubbles */
@@ -27,29 +27,30 @@ custom_css = """
     border-radius: 16px !important;
 }
 
-/* User messages - soft emerald */
+/* User messages - emerald accent */
 .message.user {
     background: linear-gradient(135deg, #10b981, #059669) !important;
     color: white !important;
 }
 
-/* Bot messages - light sage */
+/* Bot messages - dark slate */
 .message.bot, .message.assistant {
-    background: #f0fdf4 !important;
-    border: 1px solid #a7f3d0 !important;
-    color: #064e3b !important;
+    background: #334155 !important;
+    border: 1px solid #475569 !important;
+    color: #e2e8f0 !important;
 }
 
 /* Input textbox */
-.textbox {
+.textbox, textarea, input[type="text"] {
     border-radius: 12px !important;
-    border: 2px solid #a7f3d0 !important;
-    background: white !important;
+    border: 2px solid #475569 !important;
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
 }
 
-.textbox:focus-within {
+.textbox:focus-within, textarea:focus, input[type="text"]:focus {
     border-color: #10b981 !important;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
 }
 
 /* Send button - vibrant emerald */
@@ -69,61 +70,75 @@ custom_css = """
     box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4) !important;
 }
 
-/* Clear button - subtle outline */
+/* Clear button - dark outline */
 #clear-btn {
-    background: white !important;
-    border: 2px solid #d1fae5 !important;
-    color: #059669 !important;
+    background: #334155 !important;
+    border: 2px solid #475569 !important;
+    color: #10b981 !important;
     font-weight: 500 !important;
     border-radius: 12px !important;
     transition: all 0.2s ease !important;
 }
 
 #clear-btn:hover {
-    background: #f0fdf4 !important;
+    background: #475569 !important;
     border-color: #10b981 !important;
 }
 
 /* Right panel styling */
 .panel {
-    background: rgba(255, 255, 255, 0.8) !important;
+    background: #1e293b !important;
     border-radius: 16px !important;
-    border: 1px solid #d1fae5 !important;
+    border: 1px solid #334155 !important;
 }
 
 /* Labels and badges */
-.label {
-    background: white !important;
+.label, .label-wrap {
+    background: #334155 !important;
     border-radius: 12px !important;
-    border: 1px solid #d1fae5 !important;
+    border: 1px solid #475569 !important;
+    color: #e2e8f0 !important;
 }
 
 /* Accordion */
 .accordion {
-    background: white !important;
+    background: #1e293b !important;
     border-radius: 12px !important;
-    border: 1px solid #d1fae5 !important;
+    border: 1px solid #334155 !important;
+    color: #e2e8f0 !important;
 }
 
 /* Checkboxes in grounding widget */
-.checkbox-group {
-    background: white !important;
-    border-radius: 8px !important;
+.checkbox-group, .checkbox-label {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
 }
 
 /* Title styling */
-h1 {
-    color: #064e3b !important;
+h1, .markdown h1 {
+    color: #10b981 !important;
     font-weight: 700 !important;
 }
 
-h3 {
-    color: #065f46 !important;
+h3, .markdown h3 {
+    color: #34d399 !important;
 }
 
-/* Markdown text */
-.markdown-text {
-    color: #064e3b !important;
+/* All text to light color */
+.markdown-text, .prose, p, span, label {
+    color: #e2e8f0 !important;
+}
+
+/* Group containers */
+.group, .form, .block {
+    background: transparent !important;
+}
+
+/* Dropdown and selects */
+select, .dropdown {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #475569 !important;
 }
 """
 
