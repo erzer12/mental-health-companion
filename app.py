@@ -73,7 +73,8 @@ def agent_logic(user_message, history):
     try:
         for msg in client.chat_completion(messages, max_tokens=512, stream=True):
             token = msg.choices[0].delta.content
-            partial_response += token
+            if token:  # Handle None tokens from streaming API
+                partial_response += token
             yield partial_response, emotion
     except Exception as e:
         yield f"I'm having trouble connecting to my brain right now. (Error: {str(e)})", emotion
