@@ -403,11 +403,7 @@ def chat_wrapper(user_input, history):
 
 
 # --- 4. THE DASHBOARD UI ---
-with gr.Blocks(
-    theme=gr.themes.Soft(primary_hue="emerald", neutral_hue="slate"),
-    css=custom_css,
-    title="Zen Companion"
-) as demo:
+with gr.Blocks(title="Zen Companion") as demo:
     
     gr.Markdown("# 🌿 Zen: Your Mental Health Companion")
     gr.Markdown("*A safe space to talk. I'm here to listen and help.*")
@@ -417,9 +413,7 @@ with gr.Blocks(
         with gr.Column(scale=2):
             chatbot = gr.Chatbot(
                 height=480, 
-                label="Conversation",
-                show_copy_button=True,
-                placeholder="Start a conversation... I'm here to help."
+                label="Conversation"
             )
             msg = gr.Textbox(
                 label="Your Message", 
@@ -484,4 +478,8 @@ with gr.Blocks(
     clear_btn.click(lambda: ([], "", "Waiting..."), None, [chatbot, msg, mood_badge], queue=False)
 
 if __name__ == "__main__":
-    demo.launch(ssr_mode=False)
+    demo.launch(
+        theme=gr.themes.Soft(primary_hue="emerald", neutral_hue="slate"),
+        css=custom_css,
+        ssr_mode=False
+    )
