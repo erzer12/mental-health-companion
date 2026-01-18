@@ -174,4 +174,4 @@ with gr.Blocks(title="Zen Student Companion") as demo:
     clear_btn.click(lambda: None, None, chatbot, queue=False)
 
 if __name__ == "__main__":
-    demo.launch(theme=gr.themes.Soft())
+    demo.launch(theme=gr.themes.Soft(), ssr_mode=False)
