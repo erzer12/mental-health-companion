@@ -63,9 +63,8 @@ def agent_logic(user_message, history):
 
     # Prepare messages for Llama-3
     messages = [{"role": "system", "content": system_prompt}]
-    for u, a in history:
-        messages.append({"role": "user", "content": u})
-        messages.append({"role": "assistant", "content": a})
+    for msg in history:
+        messages.append({"role": msg["role"], "content": msg["content"]})
     messages.append({"role": "user", "content": user_message})
 
     # Step D: GENERATION (Stream Response)
@@ -90,8 +89,12 @@ def chat_wrapper(user_input, history):
     for text_chunk, emotion in agent_logic(user_input, history):
         generated_text = text_chunk
         detected_emotion = emotion
-        # Stream the chat update immediately
-        yield history + [[user_input, generated_text]], "", f"Detected: {detected_emotion.upper()}", gr.update(visible=False), gr.update(visible=False)
+        # Stream the chat update immediately (Gradio 6 message format)
+        new_history = history + [
+            {"role": "user", "content": user_input},
+            {"role": "assistant", "content": generated_text}
+        ]
+        yield new_history, "", f"Detected: {detected_emotion.upper()}", gr.update(visible=False), gr.update(visible=False)
 
     # 2. Post-Processing: Decide which widget to show
     show_breathing = gr.update(visible=False)
@@ -105,8 +108,12 @@ def chat_wrapper(user_input, history):
     if "panic" in user_input.lower() or "overwhelm" in user_input.lower():
         show_grounding = gr.update(visible=True)
     
-    # Final Yield with widgets active
-    yield history + [[user_input, generated_text]], "", f"Detected: {detected_emotion.upper()}", show_breathing, show_grounding
+    # Final Yield with widgets active (Gradio 6 message format)
+    final_history = history + [
+        {"role": "user", "content": user_input},
+        {"role": "assistant", "content": generated_text}
+    ]
+    yield final_history, "", f"Detected: {detected_emotion.upper()}", show_breathing, show_grounding
 
 
 # --- 4. THE DASHBOARD UI (Blocks) ---
