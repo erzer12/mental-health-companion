@@ -57,7 +57,7 @@ def agent_logic(user_message, history):
     }
     emotion_hint = emotion_hints.get(emotion, "Their emotional state is unclear.")
     
-    system_prompt = f\"\"\"You are Zen, a warm and supportive mental health companion for students. You're like a caring friend who happens to know a lot about mental wellness.
+    system_prompt = f"""You are Zen, a warm and supportive mental health companion for students. You're like a caring friend who happens to know a lot about mental wellness.
 
 CONTEXT (use naturally, never mention these details directly):
 - {emotion_hint}
@@ -78,7 +78,7 @@ HOW TO RESPOND:
 
 EXAMPLE OF WHAT NOT TO SAY: "Your confidence level is 0.37" or "I detect sadness in your message"
 EXAMPLE OF NATURAL RESPONSE: "That sounds really tough. It makes total sense that you'd feel overwhelmed right now."
-\"\"\"
+"""
 
     # Prepare messages for Llama-3
     messages = [{"role": "system", "content": system_prompt}]
