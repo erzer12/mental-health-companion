@@ -1,7 +1,7 @@
 import os
 import json
 from langchain_community.document_loaders import PyPDFDirectoryLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
@@ -23,7 +23,6 @@ def build_knowledge_base():
     current_files = get_current_files()
     
     # --- 1. THE FRESHNESS CHECK ---
-    # We check if the database exists and if the file list matches what we indexed last time.
     if os.path.exists(DB_FAISS_PATH) and os.path.exists(MANIFEST_PATH):
         with open(MANIFEST_PATH, 'r') as f:
             last_indexed_files = json.load(f)
@@ -60,7 +59,7 @@ def build_knowledge_base():
 
     db.save_local(DB_FAISS_PATH)
     
-    # SAVE MANIFEST (The Memory of what we learned)
+    # SAVE MANIFEST
     with open(MANIFEST_PATH, 'w') as f:
         json.dump(current_files, f)
     
