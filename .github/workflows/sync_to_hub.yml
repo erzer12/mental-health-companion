@@ -13,13 +13,38 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+      
+      - name: Add HF Metadata to README
+        run: |
+          # Create HF frontmatter
+          cat > /tmp/hf_header.txt << 'EOF'
+          ---
+          title: Mental Health Companion
+          emoji: 🌿
+          colorFrom: green
+          colorTo: blue
+          sdk: gradio
+          sdk_version: 6.3.0
+          app_file: app.py
+          pinned: false
+          license: mit
+          short_description: 'AI chatbot with mood detection & mental health support'
+          ---
+
+          EOF
+          # Prepend to README
+          cat /tmp/hf_header.txt README.md > /tmp/README_HF.md
+          mv /tmp/README_HF.md README.md
+      
       - name: Push to Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          HF_USERNAME: Erzer12  # Your actual HF Username
-          SPACE_NAME: mental-health-companion # Your actual Space Name
+          HF_USERNAME: Erzer12
+          SPACE_NAME: mental-health-companion
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git remote add space https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$SPACE_NAME
+          git add README.md
+          git commit -m "Add HF metadata" --allow-empty
+          git remote add space https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$SPACE_NAME || true
           git push --force space main
