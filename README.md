@@ -1,19 +1,9 @@
----
-title: Mental Health Companion
-emoji: 🌿
-colorFrom: green
-colorTo: blue
-sdk: gradio
-sdk_version: 6.3.0
-app_file: app.py
-pinned: false
-license: mit
-short_description: 'AI chatbot with mood detection & mental health support'
----
-
 # 🌿 Zen: Mental Health Companion
 
-An **AI-powered mental health support chatbot** designed specifically for students. Zen combines **emotion detection**, **retrieval-augmented generation (RAG)**, and **interactive wellness tools** to provide personalized, empathetic support.
+An **AI-powered mental health support chatbot** for students. Zen combines **emotion detection**, **RAG-powered knowledge retrieval**, and **interactive wellness tools** to provide personalized, empathetic support.
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Hugging_Face-yellow?style=for-the-badge)](https://huggingface.co/spaces/Erzer12/mental-health-companion)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/erzer12/mental-health-companion)
 
 ![Gradio](https://img.shields.io/badge/Gradio-6.3.0-orange?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
@@ -23,68 +13,70 @@ An **AI-powered mental health support chatbot** designed specifically for studen
 
 ## ✨ Features
 
-### 🧠 Intelligent Emotion Detection
+### 🧠 Enhanced Emotion Detection
 - Real-time emotion analysis using `j-hartmann/emotion-english-distilroberta-base`
-- Detects emotions: joy, sadness, anger, fear, surprise, disgust, neutral
-- Adapts responses based on detected emotional state
+- **Smart overrides**: Academic stress → `stress` (not sadness), panic keywords → `panic`
+- Detects: joy, sadness, anger, fear, stress, panic, anxiety, dissociation, neutral
 
 ### 📚 Knowledge-Grounded Responses (RAG)
-- Retrieves relevant information from a curated mental health PDF library
-- Uses FAISS vector database for fast semantic search
-- Smart caching: only rebuilds when documents change
+- Retrieves from 21 curated mental health PDFs
+- FAISS vector database with smart caching
+- Topics: anxiety, panic, procrastination, sleep, self-esteem, cognitive techniques
 
 ### 💬 Empathetic AI Conversations
 - Powered by `Meta-Llama-3-8B-Instruct` via Hugging Face Inference API
-- Streaming responses for natural conversation flow
-- Context-aware prompts that incorporate emotion + retrieved knowledge
+- Natural, friend-like tone (never clinical or robotic)
+- Context-aware prompts incorporating emotion + retrieved knowledge
 
 ### 🧘 Interactive Wellness Widgets
-- **Box Breathing Tool**: Activates for high-arousal emotions (fear, anger, sadness)
-- **5-4-3-2-1 Grounding Exercise**: Triggers when panic/overwhelm keywords detected
-- Dynamic UI that responds to user's emotional needs
+
+| Widget | Trigger | Description |
+|--------|---------|-------------|
+| **🌬️ Animated Breathing** | panic, anxiety, fear | CSS-animated circle for box breathing (4-4-4-4) |
+| **🦶 5-4-3-2-1 Grounding** | dissociation, panic | Interactive checklist for sensory grounding |
+
+### 🎨 Dark Glassmorphism UI
+- Calming dark theme with emerald accents
+- Backdrop blur effects
+- Smooth hover animations
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         USER INPUT                               │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STEP A: PERCEPTION                                              │
-│  ┌─────────────────────────────────────────────────────────┐    │
-│  │  Emotion Classifier (DistilRoBERTa)                      │    │
-│  │  → Detects: joy, sadness, anger, fear, surprise, etc.   │    │
-│  └─────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STEP B: MEMORY (RAG)                                            │
-│  ┌─────────────────────────────────────────────────────────┐    │
-│  │  FAISS Vector DB + Sentence Transformers                 │    │
-│  │  → Retrieves relevant mental health techniques           │    │
-│  └─────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STEP C: REASONING                                               │
-│  ┌─────────────────────────────────────────────────────────┐    │
-│  │  Llama-3-8B-Instruct (Serverless API)                    │    │
-│  │  → Generates empathetic, contextual response             │    │
-│  └─────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STEP D: UI DECISION                                             │
-│  → Show breathing widget? Show grounding checklist?              │
-│  → Stream response to chat interface                             │
-└─────────────────────────────────────────────────────────────────┘
+USER INPUT
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  STEP A: ENHANCED PERCEPTION            │
+│  • ML Emotion Classifier                │
+│  • Keyword-based overrides (panic,      │
+│    procrastination, dissociation)       │
+└─────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  STEP B: MEMORY (RAG)                   │
+│  • FAISS Vector DB                      │
+│  • Sentence Transformers embeddings     │
+│  • 21 mental health PDFs indexed        │
+└─────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  STEP C: REASONING                      │
+│  • Llama-3-8B-Instruct                  │
+│  • Dynamic system prompt with context   │
+└─────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│  STEP D: UI DECISION                    │
+│  • Show breathing widget?               │
+│  • Show grounding checklist?            │
+│  • Stream response                      │
+└─────────────────────────────────────────┘
 ```
 
 ---
@@ -93,18 +85,18 @@ An **AI-powered mental health support chatbot** designed specifically for studen
 
 ```
 mental-health-companion/
-├── app.py                 # Main Gradio application
-├── rag_engine.py          # RAG pipeline (PDF ingestion, FAISS, retrieval)
-├── requirements.txt       # Python dependencies
+├── app.py                 # Main Gradio app (UI + logic)
+├── rag_engine.py          # RAG pipeline (PDF ingestion, FAISS)
+├── requirements.txt       # Dependencies (pinned versions)
 ├── README.md              # This file
-├── data/                  # PDF knowledge base (21 mental health resources)
-│   ├── Anxiety Information Sheet - 08 - Breathing Retraining.pdf
-│   ├── Panic Information Sheet - 01 - What is Panic.pdf
-│   ├── Sleep Information Sheet - 04 - Sleep Hygiene.pdf
-│   └── ... (18 more PDFs)
-└── vectorstore/           # Auto-generated FAISS index (created on first run)
-    ├── db_faiss/
-    └── manifest.json
+├── .gitignore             # Excludes vectorstore/, __pycache__/
+├── data/                  # 21 mental health PDFs
+│   ├── Anxiety Information Sheet - *.pdf
+│   ├── Panic Information Sheet - *.pdf
+│   └── ...
+├── vectorstore/           # Auto-generated on first run
+└── .github/workflows/     # CI/CD
+    └── sync_to_hub.yml    # Auto-sync to HF Spaces
 ```
 
 ---
@@ -113,101 +105,73 @@ mental-health-companion/
 
 ### Prerequisites
 - Python 3.10+
-- Hugging Face account with API token
+- Hugging Face token ([get one here](https://huggingface.co/settings/tokens))
 
 ### Local Development
 
-1. **Clone the repository**
-   ```bash
-   git clone https://huggingface.co/spaces/Erzer12/mental-health-companion
-   cd mental-health-companion
-   ```
+```bash
+# Clone
+git clone https://github.com/erzer12/mental-health-companion.git
+cd mental-health-companion
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Install
+pip install -r requirements.txt
 
-3. **Set your Hugging Face token**
-   ```bash
-   export HF_TOKEN="your_huggingface_token"
-   ```
+# Set token
+export HF_TOKEN="your_huggingface_token"
 
-4. **Run the app**
-   ```bash
-   python app.py
-   ```
+# Run
+python app.py
+```
 
-5. Open `http://localhost:7860` in your browser
+Open `http://localhost:7860`
 
-### Deploying to Hugging Face Spaces
+### Deploy to Hugging Face Spaces
 
-1. Create a new Space on [Hugging Face](https://huggingface.co/new-space)
-2. Select **Gradio** as the SDK
-3. Push this repository to your Space
-4. Add `HF_TOKEN` in **Settings → Secrets**
-
----
-
-## 📚 Knowledge Base
-
-The `/data` folder contains curated mental health resources covering:
-
-| Topic | Resources |
-|-------|-----------|
-| **Anxiety** | Breathing retraining, progressive muscle relaxation, stress coping |
-| **Panic** | Understanding panic attacks, grounding techniques |
-| **Procrastination** | Vicious cycle, practical strategies, action planning |
-| **Sleep** | Insomnia, sleep hygiene best practices |
-| **Social Anxiety** | Understanding social anxiety, breathing exercises |
-| **Self-Esteem** | Acknowledging positives, building confidence |
-| **Perfectionism** | Challenging perfectionistic thinking |
-| **Unhelpful Thinking** | Catastrophising, shoulding/musting, cognitive restructuring |
-
-### Adding New Resources
-
-1. Add PDF files to the `data/` folder
-2. Restart the application
-3. The RAG engine will automatically detect changes and rebuild the vector database
+1. Fork/push to a new HF Space (Gradio SDK)
+2. Add `HF_TOKEN` secret in Space settings
 
 ---
 
 ## ⚙️ Configuration
 
-### Models Used
+### Models
 
 | Component | Model | Provider |
 |-----------|-------|----------|
-| Emotion Detection | `j-hartmann/emotion-english-distilroberta-base` | Local (Transformers) |
+| Emotion Detection | `j-hartmann/emotion-english-distilroberta-base` | Local |
 | Embeddings | `sentence-transformers/all-MiniLM-L6-v2` | Local |
 | Chat LLM | `meta-llama/Meta-Llama-3-8B-Instruct` | HF Inference API |
 
-### Customization
+### Emotion Override Rules
 
-- **Change LLM**: Modify `InferenceClient()` in `app.py` line 21
-- **Adjust RAG chunks**: Edit `chunk_size` and `chunk_overlap` in `rag_engine.py`
-- **Modify widget triggers**: Update emotion conditions in `chat_wrapper()` function
+| Keywords | Classified As |
+|----------|---------------|
+| homework, exam, lazy, procrastinating | `stress` |
+| panic, heart racing, can't breathe | `panic` |
+| anxious, worried, scared | `anxiety` |
+| unreal, numb, disconnected | `dissociation` |
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: [Gradio](https://gradio.app/) - Modern ML web interfaces
-- **Vector DB**: [FAISS](https://github.com/facebookresearch/faiss) - Fast similarity search
-- **Embeddings**: [Sentence Transformers](https://sbert.net/) - Semantic text embeddings
-- **LLM Orchestration**: [LangChain](https://langchain.com/) - Document loading & text splitting
-- **Inference**: [Hugging Face Hub](https://huggingface.co/) - Serverless model APIs
+- **Frontend**: Gradio 6.3.0 with custom CSS
+- **Vector DB**: FAISS
+- **Embeddings**: Sentence Transformers
+- **LLM**: LangChain + Hugging Face Inference
+- **CI/CD**: GitHub Actions → HF Spaces sync
 
 ---
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE)
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Mental health resources adapted from [Centre for Clinical Interventions](https://www.cci.health.wa.gov.au/)
-- Emotion detection model by [j-hartmann](https://huggingface.co/j-hartmann)
+- Mental health resources from [Centre for Clinical Interventions](https://www.cci.health.wa.gov.au/)
+- Emotion model by [j-hartmann](https://huggingface.co/j-hartmann)
 - Built with ❤️ for student mental health
