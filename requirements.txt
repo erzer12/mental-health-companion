@@ -1,12 +1,14 @@
-huggingface_hub>=0.20.0
+huggingface_hub>=0.23.0
 transformers>=4.36.0
-torch>=2.0.0
-gradio>=6.3.0
-sentence-transformers>=2.2.0
-langchain>=0.1.0
-langchain-community>=0.0.10
-langchain-huggingface>=0.0.1
-langchain-text-splitters>=0.0.1
+torch>=2.1.0
+gradio>=4.0.0
+sentence-transformers>=2.3.0
+# -- The Fix: Strict Pinned Versions --
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-huggingface>=0.3.0
+langchain-text-splitters>=0.3.0
+# -------------------------------------
 faiss-cpu>=1.7.4
-pypdf>=3.17.0
-accelerate>=0.25.0
+pypdf>=4.0.0
+accelerate>=0.26.0
